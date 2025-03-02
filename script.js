@@ -2,6 +2,7 @@
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@latest/build/three.module.js';
 import { GLTFLoader } from 'https://cdn.jsdelivr.net/npm/three@latest/examples/jsm/loaders/GLTFLoader.js';
 import { ARButton } from 'https://cdn.jsdelivr.net/npm/three@latest/examples/jsm/webxr/ARButton.js';
+import armodel from "./models/ufo.glb";
 
 let scene, camera, renderer, model;
 
@@ -28,7 +29,7 @@ function init() {
     
     // Load 3D Model (Replace with your hosted GLTF/GLB model URL)
     const loader = new GLTFLoader();
-    loader.load('models/ufo.glb', (gltf) => {
+    loader.load(armodel, (gltf) => {
         model = gltf.scene;
         model.scale.set(0.5, 0.5, 0.5); // Adjust size
         model.position.set(0, 0, -1); // Position in front of user
