@@ -29,7 +29,7 @@ function init() {
     
     // Load 3D Model (Replace with your hosted GLTF/GLB model URL)
     const loader = new GLTFLoader();
-    loader.load("https://drive.google.com/file/d/1v2k15paleP5IpGLFYs6mWJi2Uogo9hG6/view", (gltf) => {
+    loader.load(armodel, (gltf) => {
         model = gltf.scene;
         model.scale.set(0.5, 0.5, 0.5); // Adjust size
         model.position.set(0, 0, -1); // Position in front of user
