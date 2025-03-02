@@ -1,57 +1,30 @@
-// Import Three.js and WebXR libraries
-import * as THREE from 'https://cdn.jsdelivr.net/npm/three@latest/build/three.module.js';
-import { GLTFLoader } from 'https://cdn.jsdelivr.net/npm/three@latest/examples/jsm/loaders/GLTFLoader.js';
-import { ARButton } from 'https://cdn.jsdelivr.net/npm/three@latest/examples/jsm/webxr/ARButton.js';
-import armodel from "./models/ufo.glb";
+// Ensure Three.js is available globally
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+const renderer = new THREE.WebGLRenderer({ alpha: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
 
-let scene, camera, renderer, model;
-
-function init() {
-    // Create Scene
-    scene = new THREE.Scene();
-    
-    // Set up Camera
-    camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 100);
-    scene.add(camera);
-    
-    // Renderer with WebXR support
-    renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.xr.enabled = true;
-    document.body.appendChild(renderer.domElement);
-    
-    // AR Button
-    document.body.appendChild(ARButton.createButton(renderer));
-    
-    // Lighting
-    const light = new THREE.HemisphereLight(0xffffff, 0xbbbbff, 1);
-    scene.add(light);
-    
-    // Load 3D Model (Replace with your hosted GLTF/GLB model URL)
-    const loader = new GLTFLoader();
-    loader.load(armodel, (gltf) => {
-        model = gltf.scene;
-        model.scale.set(0.5, 0.5, 0.5); // Adjust size
-        model.position.set(0, 0, -1); // Position in front of user
+// GLTF Loader
+const loader = new THREE.GLTFLoader();
+loader.load('https://cdn.jsdelivr.net/gh/kishanmatspiretech/arvisitingcard/models/ufo.glb', 
+    function (gltf) {
+        const model = gltf.scene;
+        model.scale.set(0.5, 0.5, 0.5);
+        model.position.set(0, 0, -1);
         scene.add(model);
-    });
-    
-    // Handle window resize
-    window.addEventListener('resize', onWindowResize);
-}
+    },
+    undefined, 
+    function (error) {
+        console.error('Error loading GLB model:', error);
+    }
+);
 
-function onWindowResize() {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-}
+camera.position.z = 2;
 
 function animate() {
-    renderer.setAnimationLoop(() => {
-        if (model) model.rotation.y += 0.01; // Rotate model for effect
-        renderer.render(scene, camera);
-    });
+    requestAnimationFrame(animate);
+    renderer.render(scene, camera);
 }
 
-init();
 animate();
